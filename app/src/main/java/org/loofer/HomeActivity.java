@@ -1,25 +1,20 @@
 package org.loofer;
 
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import org.loofer.photo.SelectPicActivity;
 import org.loofer.utils.ToastUtils;
 import org.loofer.view.FullyGridLayoutManager;
 import org.loofer.watermark.R;
-
-import java.io.InputStream;
-
-import static org.loofer.watermark.R.id.recyclerView;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initData() {
         mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         FullyGridLayoutManager layoutManager = new FullyGridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setAdapter(new HoneAdapter());
         mRecyclerView.setLayoutManager(layoutManager);
@@ -59,8 +56,22 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(ListHolder holder, int position) {
+        public void onBindViewHolder(final ListHolder holder, final int position) {
             holder.icon.setImageResource(iconA[position]);
+            holder.mItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (position) {
+                        case 0:
+                            startActivity(new Intent(HomeActivity.this, SelectPicActivity.class));
+                            break;
+                        case 1:
+                            break;
+
+                    }
+                    ToastUtils.showToast(holder.mItemView.getContext(), "点击事件：" + position);
+                }
+            });
         }
 
         @Override
@@ -68,28 +79,15 @@ public class HomeActivity extends AppCompatActivity {
             return iconA.length;
         }
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                int position = (int) v.getTag();
-//                ToastUtils.showToast(HomeActivity.this, "已被点击位置:" + position);
-
-            }
-        };
-
 
         class ListHolder extends RecyclerView.ViewHolder {
             ImageView icon;
+            View mItemView;
 
             ListHolder(View itemView) {
                 super(itemView);
-//                itemView.setOnClickListener(onClickListener);
+                mItemView = itemView;
                 icon = (ImageView) itemView.findViewById(R.id.iv_icon);
-            }
-
-            public void setData(int position) {
-                icon.setImageResource(iconA[position]);
-
             }
         }
 
