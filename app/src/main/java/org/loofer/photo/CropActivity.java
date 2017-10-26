@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,16 +15,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.loofer.utils.ToastUtils;
 import org.loofer.watermark.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import me.pqpo.smartcropperlib.view.CropImageView;
 
-public class CropActivity extends AppCompatActivity {
+public class CropActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final String EXTRA_FROM_ALBUM = "extra_from_album";
@@ -54,30 +58,8 @@ public class CropActivity extends AppCompatActivity {
         ivCrop = (CropImageView) findViewById(R.id.iv_crop);
         btnCancel = (Button) findViewById(R.id.btn_cancel);
         btnOk = (Button) findViewById(R.id.btn_ok);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (ivCrop.canRightCrop()) {
-                    Bitmap crop = ivCrop.crop();
-                    if (crop != null) {
-                        saveImage(crop, mCroppedFile);
-                        setResult(RESULT_OK);
-                    } else {
-                        setResult(RESULT_CANCELED);
-                    }
-                    finish();
-                } else {
-                    Toast.makeText(CropActivity.this, "cannot crop correctly", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        btnCancel.setOnClickListener(this);
+        btnOk.setOnClickListener(this);
         mFromAlbum = getIntent().getBooleanExtra(EXTRA_FROM_ALBUM, true);
         mCroppedFile = (File) getIntent().getSerializableExtra(EXTRA_CROPPED_FILE);
         if (mCroppedFile == null) {
@@ -86,9 +68,61 @@ public class CropActivity extends AppCompatActivity {
             return;
         }
 
-        tempFile = new File(getExternalFilesDir("img"), "temp.jpg");
+
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            File sdcardDir = Environment.getExternalStorageDirectory();
+            String path = sdcardDir.getPath() + "/WaterMarker/temp";
+            File path1 = new File(path);
+            if (!path1.exists()) {
+                path1.mkdirs();
+            }
+            long time = System.currentTimeMillis();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d1 = new Date(time);
+            String t1 = format.format(d1);
+            tempFile = new File(path, t1 + ".jpg");
+//            new File(getExternalFilesDir("img"), "temp.jpg");
+        } else {
+            ToastUtils.showToast(CropActivity.this, "内部存储不可用！");
+            return;
+        }
 
         selectPhoto();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_ok:
+                cropPic();
+                break;
+            case R.id.btn_cancel:
+                cancel();
+                break;
+
+        }
+    }
+
+    //取消裁剪
+    private void cancel() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
+
+    //裁剪图片
+    private void cropPic() {
+        if (ivCrop.canRightCrop()) {
+            Bitmap crop = ivCrop.crop();
+            if (crop != null) {
+                saveImage(crop, mCroppedFile);
+                setResult(RESULT_OK);
+            } else {
+                setResult(RESULT_CANCELED);
+            }
+            finish();
+        } else {
+            Toast.makeText(CropActivity.this, "cannot crop correctly", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void selectPhoto() {
@@ -146,7 +180,7 @@ public class CropActivity extends AppCompatActivity {
     private void saveImage(Bitmap bitmap, File saveFile) {
         try {
             FileOutputStream fos = new FileOutputStream(saveFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
         } catch (IOException e) {
