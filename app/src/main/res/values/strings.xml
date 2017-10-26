@@ -3,5 +3,6 @@
 
     <string name="app_name">水印砖家</string>
     <string name="hello_world">Hello world!</string>
+    <string name="sd_invailed">内部存储不可用</string>
 
 </resources>

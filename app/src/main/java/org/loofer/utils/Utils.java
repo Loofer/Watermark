@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -42,5 +44,24 @@ public class Utils {
         }
         return image;
     }
+
+    public static boolean isExternalStorageAvailable() {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static File getFilePathByExtennel(String path, String fileName) {
+        File sdcardDir = Environment.getExternalStorageDirectory();
+        String abpath = sdcardDir.getPath() + path;
+        File path1 = new File(abpath);
+        if (!path1.exists()) {
+            path1.mkdirs();
+        }
+        return new File(abpath, fileName);
+    }
+
 
 }

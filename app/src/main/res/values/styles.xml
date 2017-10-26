@@ -53,7 +53,7 @@
         <item name="gallery_toolbar_close_color">#2A2A2F</item>
         <item name="gallery_toolbar_text_color">#2A2A2F</item>
         <item name="gallery_page_bg">#FFFFFF</item>
-        <item name="gallery_default_image">@drawable/ic_launcher</item>
+        <item name="gallery_default_image">@mipmap/ic_launcher</item>
         <item name="gallery_imageview_bg">#FFFFFF</item>
     </style>
 

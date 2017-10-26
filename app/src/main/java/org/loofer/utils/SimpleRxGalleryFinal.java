@@ -100,7 +100,9 @@ public class SimpleRxGalleryFinal {
     private File getDiskCacheDir() {
         String cachePath;
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || !Environment.isExternalStorageRemovable()) {
-            File externalCacheDir = listener.getSimpleActivity().getExternalCacheDir();
+//            File externalCacheDir = listener.getSimpleActivity().getExternalCacheDir();
+
+            File externalCacheDir = new File(Environment.getExternalStorageDirectory() + File.separator + Constants.IMAGE_BASE);
             if (externalCacheDir != null) {
                 cachePath = externalCacheDir.getPath();
             } else {
@@ -109,7 +111,7 @@ public class SimpleRxGalleryFinal {
         } else {
             cachePath = listener.getSimpleActivity().getCacheDir().getPath();
         }
-        return new File(cachePath, imageName());
+        return new File(cachePath, FileUtils.getFileNameByTime());
     }
 
     private void notifyImageToCamera(Context context, Uri uri) {
@@ -120,10 +122,6 @@ public class SimpleRxGalleryFinal {
             e.printStackTrace();
         }
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-    }
-
-    private String imageName() {
-        return System.currentTimeMillis() + ".jpg";
     }
 
 
