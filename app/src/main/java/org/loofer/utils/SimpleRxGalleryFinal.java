@@ -12,9 +12,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.model.AspectRatio;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
+import cn.finalteam.rxgalleryfinal.RxGalleryFinal;
 
 /**
  * by y on 17/07/2017.
@@ -30,6 +33,9 @@ public class SimpleRxGalleryFinal {
     private RxGalleryFinalCropListener listener = null;
 
     private Uri imagePath;
+
+    private static RxGalleryFinal rxGalleryFinal;
+
 
 
     private static final class SimpleRxGalleryFinalHolder {
@@ -64,6 +70,10 @@ public class SimpleRxGalleryFinal {
                 .startActivityForResult(intent, TYPE_CAMERA);
     }
 
+
+
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) {
             case Activity.RESULT_CANCELED:
@@ -87,6 +97,10 @@ public class SimpleRxGalleryFinal {
                     case TYPE_CAMERA:
                         notifyImageToCamera(listener.getSimpleActivity(), imagePath);
                         UCrop of = UCrop.of(imagePath, Uri.fromFile(getDiskCacheDir()));
+//                        of.withAspectRatio(8,5);
+                        UCrop.Options options = new UCrop.Options();
+                        options.setAspectRatioOptions(0, new AspectRatio("8:5", 8, 5));
+                        of.withOptions(options);
                         of.start(listener.getSimpleActivity());
                         break;
                     case UCrop.REQUEST_CROP:

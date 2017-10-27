@@ -2,22 +2,35 @@ package org.loofer.watermark;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
+import org.loofer.utils.ScreenUtils;
 import org.loofer.utils.ToastUtils;
-import org.loofer.utils.Utils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+
+import cn.finalteam.rxgalleryfinal.utils.Logger;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.loofer.photo.SelectPicActivity.CROP_PIC_PATH;
 
@@ -25,11 +38,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ImageView mImageView;
     private SeekBar mSeekBar;
+    private SeekBar mSeekBarAlpha;
     private ImageUtil mImageUtil;
-    private ImageView mImageViewH;
     private String picPath;
     private Bitmap srcBitmap;
     private Button mBtnSave;
+    private TextView mTvSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +57,65 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mImageView = (ImageView) findViewById(R.id.iv_bg);
-        mSeekBar = (SeekBar) findViewById(R.id.seekBar);
+        if (srcBitmap.getWidth() > srcBitmap.getHeight()) {
+            mImageView.setMaxWidth(ScreenUtils.getScreenWidth(this));
+            mImageView.setMaxHeight((int) (ScreenUtils.getScreenWidth(this) * 5.0 / 8.0 + 0.5));
+        }
+        mTvSize = (TextView) findViewById(R.id.tv_size);
+
+        mTvSize.setText("w：" + srcBitmap.getWidth() + "h：" + srcBitmap.getHeight());
+        mSeekBar = (SeekBar) findViewById(R.id.seekBar_degree);
+        mSeekBarAlpha = (SeekBar) findViewById(R.id.seekBar_alpha);
         mBtnSave = (Button) findViewById(R.id.btn_save);
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveImage();
+                Flowable.just(1)
+                        .throttleFirst(1, TimeUnit.SECONDS)
+                        .map(new Function<Integer, Boolean>() {
+                            @Override
+                            public Boolean apply(@NonNull Integer integer) throws Exception {
+                                Looper.prepare();
+                                // TODO: 2017/10/27 loading
+                                ToastUtils.showToast(MainActivity.this, "正在保存文件请稍等");
+                                Looper.loop();
+                                return saveImage();
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Boolean>() {
+                            @Override
+                            public void accept(@NonNull Boolean b) throws Exception {
+                                // TODO: 2017/10/27 hide loading
+                                if (b) {
+                                    ToastUtils.showToast(MainActivity.this, "文件已保存");
+                                    Logger.d("文件保存成功");
+                                } else {
+                                    ToastUtils.showToast(MainActivity.this, "保存文件失败");
+                                    Logger.d("文件保存失败");
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(@NonNull Throwable throwable) throws Exception {
+                                // TODO: 2017/10/27 hide loading
+                                ToastUtils.showToast(MainActivity.this, "保存文件失败");
+                                Logger.d(throwable.getMessage());
+                            }
+                        });
+
             }
         });
-        mImageViewH = (ImageView) findViewById(R.id.iv_horizontal);
         mSeekBar.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mSeekBarAlpha.setOnSeekBarChangeListener(mOnSeekBarAlphaChangeListener);
         mImageUtil = new ImageUtil();
 //        mSeekBar.setMax(180);
-        setWaterMask(45);
+        setWaterMask(45, 0);
 //        setHWaterMask(45);
     }
 
-    public void saveImage() {
+    public boolean saveImage() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             //创建一个文件夹对象，赋值为外部存储器的目录
             File sdcardDir = Environment.getExternalStorageDirectory();
@@ -77,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             Date d1 = new Date(time);
             String t1 = format.format(d1);
             File file = new File(path, t1 + "-marked.jpg");
-            ToastUtils.showToast(MainActivity.this, "文件已保存到：" + file.getPath());
             mImageView.setDrawingCacheEnabled(true);
             Bitmap bm = mImageView.getDrawingCache();
             BufferedOutputStream bos;
@@ -87,27 +142,20 @@ public class MainActivity extends AppCompatActivity {
                 bm.compress(Bitmap.CompressFormat.PNG, 100, bos);
                 bos.flush();
                 bos.close();
+                return true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-
+        return false;
 
     }
 
-    private void setWaterMask(int degress) {
+    private void setWaterMask(int degress, int alpha) {
 
-        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, "我是水印", srcBitmap.getWidth(), srcBitmap.getHeight(), true, degress);
+        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, "我是水印", srcBitmap.getWidth(), srcBitmap.getHeight(), 18, 25, Color.WHITE, alpha, degress);
         Bitmap waterMaskBitmap = mImageUtil.createWaterMaskBitmap(srcBitmap, markTextBitmap, 0, 0);
         mImageView.setImageBitmap(waterMaskBitmap);
-    }
-
-    private void setHWaterMask(int degress) {
-        Bitmap srcBitmap = Utils.getImageFromAssetsFile(this, "srcHImage.png");
-        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, "我是水印", srcBitmap.getWidth(), srcBitmap.getHeight(), true, degress);
-        Bitmap waterMaskBitmap = mImageUtil.createWaterMaskBitmap(srcBitmap, markTextBitmap, 0, 0);
-        mImageViewH.setImageBitmap(waterMaskBitmap);
     }
 
 
@@ -115,7 +163,25 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             ToastUtils.showToast(MainActivity.this, progress + "");
-            setWaterMask(progress);
+            setWaterMask(progress, mSeekBarAlpha.getProgress());
+//            setHWaterMask(progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
+    SeekBar.OnSeekBarChangeListener mOnSeekBarAlphaChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            ToastUtils.showToast(MainActivity.this, progress + "");
+            setWaterMask(mSeekBar.getProgress(), progress);
 //            setHWaterMask(progress);
         }
 

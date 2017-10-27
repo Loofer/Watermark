@@ -7,15 +7,22 @@
 
     <ImageView
         android:id="@+id/iv_bg"
-        android:scaleType="centerInside"
+        android:scaleType="fitCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <SeekBar
-        android:id="@+id/seekBar"
+        android:id="@+id/seekBar_degree"
         android:layout_width="match_parent"
         android:max="180"
         android:progress="45"
+        android:layout_height="wrap_content"/>
+
+    <SeekBar
+        android:id="@+id/seekBar_alpha"
+        android:layout_width="match_parent"
+        android:max="255"
+        android:progress="255"
         android:layout_height="wrap_content"/>
 
 
@@ -25,9 +32,11 @@
         android:layout_height="wrap_content"
         android:text="保存"/>
 
-    <ImageView
-        android:id="@+id/iv_horizontal"
+
+    <TextView
+        android:id="@+id/tv_size"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>

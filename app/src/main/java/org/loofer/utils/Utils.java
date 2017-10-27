@@ -57,6 +57,10 @@ public class Utils {
         File sdcardDir = Environment.getExternalStorageDirectory();
         String abpath = sdcardDir.getPath() + path;
         File path1 = new File(abpath);
+        if (!path1.getParentFile().exists()) {
+            path1.getParentFile().mkdirs();
+        }
+
         if (!path1.exists()) {
             path1.mkdirs();
         }

@@ -170,6 +170,9 @@ public class HomeActivity extends AppCompatActivity {
 //        RxGalleryFinalApi.setImgSaveRxSDCard("WaterMarker");
         //裁剪会自动生成路径；也可以手动设置裁剪的路径；
         RxGalleryFinalApi.setImgSaveRxCropSDCard(Constants.IMAGE_BASE + Constants.IMAGE_CROP);
+
+
+
         SimpleRxGalleryFinal.get().init(
                 new SimpleRxGalleryFinal.RxGalleryFinalCropListener() {
                     @NonNull
@@ -217,7 +220,8 @@ public class HomeActivity extends AppCompatActivity {
         RxGalleryFinalApi.setImgSaveRxSDCard("WaterMarker");
         RxGalleryFinalApi.setImgSaveRxCropSDCard("WaterMarker/crop");//裁剪会自动生成路径；也可以手动设置裁剪的路径；
         RxGalleryFinalApi instance = RxGalleryFinalApi.getInstance(HomeActivity.this);
-        instance.openGalleryRadioImgDefault(
+        instance
+                .openGalleryRadioImgDefault(
                 new RxBusResultDisposable<ImageRadioResultEvent>() {
                     @Override
                     protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
