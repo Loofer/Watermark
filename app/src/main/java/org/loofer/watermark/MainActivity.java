@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap srcBitmap;
     private Button mBtnSave;
     private TextView mTvSize;
+    private EditText mEtWaterMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mImageView = (ImageView) findViewById(R.id.iv_bg);
+        mEtWaterMarker = (EditText) findViewById(R.id.et_watermarker);
+        mEtWaterMarker.addTextChangedListener(mTextWatcher);
         if (srcBitmap.getWidth() > srcBitmap.getHeight()) {
             mImageView.setMaxWidth(ScreenUtils.getScreenWidth(this));
             mImageView.setMaxHeight((int) (ScreenUtils.getScreenWidth(this) * 5.0 / 8.0 + 0.5));
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         mSeekBarAlpha.setOnSeekBarChangeListener(mOnSeekBarAlphaChangeListener);
         mImageUtil = new ImageUtil();
 //        mSeekBar.setMax(180);
-        setWaterMask(45, 0);
+        setWaterMask("默认水印", 45, 255);
 //        setHWaterMask(45);
     }
 
@@ -151,19 +157,36 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setWaterMask(int degress, int alpha) {
+    private void setWaterMask(String strWaterMarker, int degress, int alpha) {
 
-        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, "我是水印", srcBitmap.getWidth(), srcBitmap.getHeight(), 18, 25, Color.WHITE, alpha, degress);
+        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, strWaterMarker, srcBitmap.getWidth(), srcBitmap.getHeight(), 18, 25, Color.WHITE, alpha, degress);
         Bitmap waterMaskBitmap = mImageUtil.createWaterMaskBitmap(srcBitmap, markTextBitmap, 0, 0);
         mImageView.setImageBitmap(waterMaskBitmap);
     }
 
 
+    TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            setWaterMask(s.toString(), mSeekBar.getProgress(), mSeekBarAlpha.getProgress());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
     SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             ToastUtils.showToast(MainActivity.this, progress + "");
-            setWaterMask(progress, mSeekBarAlpha.getProgress());
+            setWaterMask(mEtWaterMarker.getText().toString(), progress, mSeekBarAlpha.getProgress());
 //            setHWaterMask(progress);
         }
 
@@ -181,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             ToastUtils.showToast(MainActivity.this, progress + "");
-            setWaterMask(mSeekBar.getProgress(), progress);
+            setWaterMask(mEtWaterMarker.getText().toString(), mSeekBar.getProgress(), progress);
 //            setHWaterMask(progress);
         }
 
