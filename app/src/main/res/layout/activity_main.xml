@@ -1,17 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_horizontal"
+              android:orientation="vertical">
 
-    <include layout="@layout/common_toolbar" />
+    <include layout="@layout/common_toolbar"/>
 
     <ImageView
         android:id="@+id/iv_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"/>
 
 
     <com.zhy.android.percent.support.PercentLinearLayout
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             app:tabGravity="fill"
             app:tabMaxWidth="0dp"
-            app:tabMode="fixed" />
+            app:tabMode="fixed"/>
 
 
         <com.zhy.android.percent.support.PercentFrameLayout
@@ -39,28 +39,52 @@
                 android:id="@+id/pll_direction"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tv_direction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="方向调整"
+                    android:textSize="16sp"/>
+
                 <SeekBar
-                    android:id="@+id/seekBar_degree"
+                    android:id="@+id/seekBar_direction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
                     android:max="180"
-                    android:progress="45" />
+                    android:progress="45"/>
+
+
+                <TextView
+                    android:id="@+id/tv_alpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="透明度"
+                    android:textSize="16sp"/>
 
                 <SeekBar
                     android:id="@+id/seekBar_alpha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
                     android:max="255"
-                    android:progress="255" />
+                    android:progress="255"/>
 
 
                 <TextView
                     android:id="@+id/tv_size"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
 
 
             </com.zhy.android.percent.support.PercentLinearLayout>
@@ -73,7 +97,18 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <include layout="@layout/layout_colorchooser_grid" />
+
+                <TextView
+                    android:id="@+id/tv_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="颜色"
+                    android:textSize="16sp"/>
+
+                <include layout="@layout/layout_colorchooser_grid"/>
 
             </LinearLayout>
 
@@ -85,6 +120,23 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
+
+                <TextView
+                    android:id="@+id/tv_watermarker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="水印文字"
+                    android:textSize="16sp"/>
+
+                <EditText
+                    android:id="@+id/et_watermarker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="默认水印"/>
 
             </com.zhy.android.percent.support.PercentLinearLayout>
 

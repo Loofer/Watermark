@@ -6,15 +6,27 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.zhy.android.percent.support.PercentLinearLayout;
+
+import org.loofer.utils.SPUtils;
 import org.loofer.utils.ScreenUtils;
 import org.loofer.utils.ToastUtils;
+import org.loofer.view.ColorGridAdapter;
+import org.loofer.view.FillGridView;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -22,7 +34,6 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
 
 import cn.finalteam.rxgalleryfinal.utils.Logger;
 import io.reactivex.Flowable;
@@ -33,11 +44,13 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static org.loofer.photo.SelectPicActivity.CROP_PIC_PATH;
+import static org.loofer.view.ColorGridAdapter.COLOR_CHOOSE;
+import static org.loofer.view.ColorGridAdapter.COLOR_CHOOSE_INDEX;
 
 public class MainActivity extends AppCompatActivity {
 
     private ImageView mImageView;
-    private SeekBar mSeekBar;
+    private SeekBar mSeekBarDrection;
     private SeekBar mSeekBarAlpha;
     private ImageUtil mImageUtil;
     private String picPath;
@@ -52,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout mPllStyle;
     private PercentLinearLayout mPllOthor;
     private TabLayout mTabLayout;
+    private TextView mTvTitle;
     //    private MagicIndicator mIndicator;
 
     @Override
@@ -75,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
         mToolBar = (Toolbar) findViewById(R.id.common_toolbar);
         mToolBar.inflateMenu(R.menu.menu_main);
         mToolBar.setOnMenuItemClickListener(mOnMenuItemClickListener);
-
+        mTvTitle = (TextView) findViewById(R.id.toolbar_title_tv);
+        mTvTitle.setText("水印处理");
         mGridView = (FillGridView) findViewById(R.id.grid_color);
         mColorGridAdapter = new ColorGridAdapter(MainActivity.this);
         mColorGridAdapter.setOnColorItemClickListener(mOnColorItemClickListener);
@@ -91,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
         mTvSize = (TextView) findViewById(R.id.tv_size);
 
         mTvSize.setText("w：" + srcBitmap.getWidth() + "h：" + srcBitmap.getHeight());
-        mSeekBar = (SeekBar) findViewById(R.id.seekBar_degree);
+        mSeekBarDrection = (SeekBar) findViewById(R.id.seekBar_direction);
         mSeekBarAlpha = (SeekBar) findViewById(R.id.seekBar_alpha);
-        mSeekBar.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
+        mSeekBarDrection.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
         mSeekBarAlpha.setOnSeekBarChangeListener(mOnSeekBarAlphaChangeListener);
         mImageUtil = new ImageUtil();
-        setWaterMask(45, 255, Color.parseColor("#FF1744"));
+        setWaterMask(mEtWaterMarker.getText().toString(), 45, 255, Color.parseColor("#FF1744"));
     }
 
     private void initIndicator() {
@@ -143,10 +158,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setWaterMask(String strWaterMarker, int degress, int alpha) {
-    private void setWaterMask(int degress, int alpha, int color) {
+    private void setWaterMask(String strWaterMarker, int degress, int alpha, int color) {
 
-        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, strWaterMarker, srcBitmap.getWidth(), srcBitmap.getHeight(), 18, 25, Color.WHITE, alpha, degress);
+        Bitmap markTextBitmap = mImageUtil.getMarkTextBitmap(this, strWaterMarker, srcBitmap.getWidth(), srcBitmap.getHeight(), 18, 25, color, alpha, degress);
         Bitmap waterMaskBitmap = mImageUtil.createWaterMaskBitmap(srcBitmap, markTextBitmap, 0, 0);
         mImageView.setImageBitmap(waterMaskBitmap);
     }
@@ -160,7 +174,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            setWaterMask(s.toString(), mSeekBar.getProgress(), mSeekBarAlpha.getProgress());
+            int color = (int) SPUtils.get(MainActivity.this, COLOR_CHOOSE, Color.parseColor("#FF1744"));
+            setWaterMask(s.toString(), mSeekBarDrection.getProgress(), mSeekBarAlpha.getProgress(), color);
         }
 
         @Override
@@ -174,10 +189,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             ToastUtils.showToast(MainActivity.this, progress + "");
-            setWaterMask(mEtWaterMarker.getText().toString(), progress, mSeekBarAlpha.getProgress());
             int color = (int) SPUtils.get(MainActivity.this, COLOR_CHOOSE, Color.parseColor("#FF1744"));
-            setWaterMask(progress, mSeekBarAlpha.getProgress(), color);
-//            setHWaterMask(progress);
+            setWaterMask(mEtWaterMarker.getText().toString(), progress, mSeekBarAlpha.getProgress(), color);
         }
 
         @Override
@@ -195,9 +208,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             ToastUtils.showToast(MainActivity.this, progress + "");
-            setWaterMask(mEtWaterMarker.getText().toString(), mSeekBar.getProgress(), progress);
             int color = (int) SPUtils.get(MainActivity.this, COLOR_CHOOSE, Color.parseColor("#FF1744"));
-            setWaterMask(mSeekBar.getProgress(), progress, color);
+            setWaterMask(mEtWaterMarker.getText().toString(), mSeekBarDrection.getProgress(), progress, color);
 //            setHWaterMask(progress);
         }
 
@@ -223,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 SPUtils.put(MainActivity.this, COLOR_CHOOSE_INDEX, index);
                 SPUtils.put(MainActivity.this, COLOR_CHOOSE, color);
                 mColorGridAdapter.notifyDataSetChanged();
-                setWaterMask(mSeekBar.getProgress(), mSeekBarAlpha.getProgress(), color);
+                setWaterMask(mEtWaterMarker.getText().toString(), mSeekBarDrection.getProgress(), mSeekBarAlpha.getProgress(), color);
             }
         }
     };

@@ -28,10 +28,12 @@ public class CircleView extends FrameLayout {
 
     private final int borderWidthSmall;
     private final int borderWidthLarge;
+    private final int borderWidthMoreLage;
 
     private final Paint outerPaint;
     private final Paint whitePaint;
     private final Paint innerPaint;
+    private final Paint strokePaint;
     private boolean selected;
 
     public CircleView(Context context) {
@@ -49,6 +51,8 @@ public class CircleView extends FrameLayout {
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, r.getDisplayMetrics());
         borderWidthLarge =
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, r.getDisplayMetrics());
+        borderWidthMoreLage =
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, r.getDisplayMetrics());
 
         whitePaint = new Paint();
         whitePaint.setAntiAlias(true);
@@ -57,6 +61,10 @@ public class CircleView extends FrameLayout {
         innerPaint.setAntiAlias(true);
         outerPaint = new Paint();
         outerPaint.setAntiAlias(true);
+
+        strokePaint = new Paint();
+        strokePaint.setAntiAlias(true);
+        strokePaint.setColor(Color.BLACK);
 
         update(Color.DKGRAY);
         setWillNotDraw(false);
@@ -164,14 +172,24 @@ public class CircleView extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        final int outerRadius = getMeasuredWidth() / 2;
+        int outerRadius = getMeasuredWidth() / 2;
+        int strokeRadius = getMeasuredWidth() / 2;
+//        if (outerPaint.getColor() == 1644826) {
+//            outerRadius = outerRadius - borderWidthMoreLage;
+//        }
         if (selected) {
-            final int whiteRadius = outerRadius - borderWidthLarge;
-            final int innerRadius = whiteRadius - borderWidthSmall;
+            int whiteRadius = outerRadius - borderWidthLarge;
+            int innerRadius = whiteRadius - borderWidthSmall;
+//            if (outerPaint.getColor() == Color.WHITE) {
+//                canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, strokeRadius, strokePaint);
+//            }
             canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, outerRadius, outerPaint);
             canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, whiteRadius, whitePaint);
             canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, innerRadius, innerPaint);
         } else {
+//            if (outerPaint.getColor() == Color.WHITE) {
+//                canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, strokeRadius, strokePaint);
+//            }
             canvas.drawCircle(getMeasuredWidth() / 2, getMeasuredHeight() / 2, outerRadius, innerPaint);
         }
     }

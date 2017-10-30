@@ -262,10 +262,11 @@ class ColorPalette {
 
   static final int[] ACCENT_COLORS =
       new int[] {
+        Color.parseColor("#FFFFFF"),
         Color.parseColor("#FF1744"),
         Color.parseColor("#F50057"),
         Color.parseColor("#D500F9"),
-        Color.parseColor("#651FFF"),
+//        Color.parseColor("#651FFF"),
         Color.parseColor("#3D5AFE"),
         Color.parseColor("#2979FF"),
         Color.parseColor("#00B0FF"),
