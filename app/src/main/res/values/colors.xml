@@ -59,4 +59,8 @@
     <color name="theme_brown_dark">#5C3F36</color>
     <color name="theme_blown_accent">#785447</color>
 
+
+    <color name="md_btn_selected">#33969696</color>
+    <color name="md_btn_selected_dark">#40CBCBCB</color>
+
 </resources>
