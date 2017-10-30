@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.loofer.view.FillGridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grid_color"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:columnWidth="@dimen/colorchooser_circlesize"
+    android:gravity="center"
+    android:horizontalSpacing="8dp"
+    android:visibility="visible"
+    android:numColumns="auto_fit"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:stretchMode="columnWidth"
+    android:verticalSpacing="8dp" />

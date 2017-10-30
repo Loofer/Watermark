@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="colorchooser_circlesize">56dp</dimen>
+    <dimen name="md_action_corner_radius">2dp</dimen>
+
+    <dimen name="md_button_inset_vertical">6dp</dimen>
+    <dimen name="md_button_inset_horizontal">4dp</dimen>
+    <dimen name="md_button_textpadding_horizontal">1dp</dimen>
+    <dimen name="md_button_padding_horizontal">8dp</dimen>
+    <dimen name="md_button_padding_vertical">4dp</dimen>
+
+</resources>
