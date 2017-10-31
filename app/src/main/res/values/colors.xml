@@ -65,4 +65,18 @@
     <color name="md_btn_selected_dark">#40CBCBCB</color>
 
     <color name="theme_transparent">#ffffa7</color>
+
+    <!-- 分割线颜色 -->
+    <color name="line_splite">#EFEFEF</color>
+    
+    <color name="main_red_light">#FC8098</color>
+    <color name="main_red">#EF6F88</color>
+    <color name="main_pink">#979797</color>
+    <color name="main_orange">#FEB781</color>
+
+    <!-- 主要文字颜色 -->
+    <color name="main_text_black">#1A1C19</color>
+    <!-- 灰色文字 -->
+    <color name="main_text_gray">#A3A3A3</color>
+
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.loofer.view.FillGridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grid_home"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/line_splite"
+    android:horizontalSpacing="2dp"
+    android:numColumns="2"
+    android:stretchMode="columnWidth"
+    android:verticalSpacing="2dp" />

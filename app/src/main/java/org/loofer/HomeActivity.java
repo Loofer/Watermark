@@ -8,13 +8,10 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import org.loofer.photo.CropActivity;
 import org.loofer.utils.Constants;
@@ -22,7 +19,8 @@ import org.loofer.utils.FileUtils;
 import org.loofer.utils.SimpleRxGalleryFinal;
 import org.loofer.utils.ToastUtils;
 import org.loofer.utils.Utils;
-import org.loofer.view.FullyGridLayoutManager;
+import org.loofer.view.FillGridView;
+import org.loofer.view.HomeGridAdapter;
 import org.loofer.watermark.MainActivity;
 import org.loofer.watermark.R;
 
@@ -36,13 +34,14 @@ import cn.finalteam.rxgalleryfinal.utils.Logger;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerView;
 
     File photoFile;
 
 
     public static final String CROP_PIC_PATH = "crop_image";
-    private boolean isGetPic;
+    private FillGridView mGridHome;
+    private Toolbar mToolBar;
+    private TextView mTvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +52,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        FullyGridLayoutManager layoutManager = new FullyGridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setAdapter(new HoneAdapter());
-        mRecyclerView.setLayoutManager(layoutManager);
+        mToolBar = (Toolbar) findViewById(R.id.common_toolbar);
+        mTvTitle = (TextView) findViewById(R.id.toolbar_title_tv);
+        mTvTitle.setText("水印砖家");
+        mGridHome = (FillGridView) findViewById(R.id.grid_home);
+        mGridHome.setAdapter(new HomeGridAdapter());
+        mGridHome.setOnItemClickListener(mOnItemClickListener);
     }
 
     private void initData() {
@@ -88,72 +86,35 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    class HoneAdapter extends RecyclerView.Adapter<HoneAdapter.ListHolder> {
-        int iconA[] = {R.drawable.ic_camera, R.drawable.ic_album, R.drawable.ic_camera,
-                R.drawable.ic_album, R.drawable.ic_camera, R.drawable.ic_album,
-                R.drawable.ic_camera, R.drawable.ic_album, R.drawable.ic_camera};
-
+    AdapterView.OnItemClickListener mOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
-        public ListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_home, parent, false);
-            return new ListHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final ListHolder holder, final int position) {
-            holder.icon.setImageResource(iconA[position]);
-            holder.mItemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switch (position) {
-                        case 0:
-                            ImageFromCameraDefault();
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position) {
+                case 0:
+                    ImageFromCameraDefault();
 //                            startActivity(new Intent(HomeActivity.this, SelectPicActivity.class));
-                            break;
-                        case 1:
-                            //手工裁剪方式
-                            ImageFromGalleryDefault();
-                            break;
-                        case 2:
-                            //拍照获取图片智能裁剪
-                            startActivityForResult(CropActivity.getJumpIntent(HomeActivity.this, false, photoFile), 100);
-                            break;
-                        case 3:
-                            //相册中获取图片智能裁剪
-                            startActivityForResult(CropActivity.getJumpIntent(HomeActivity.this, true, photoFile), 100);
-                            break;
-                        case 4:
-                            break;
-                        case 5:
+                    break;
+                case 1:
+                    //手工裁剪方式
+                    ImageFromGalleryDefault();
+                    break;
+                case 2:
+                    //拍照获取图片智能裁剪
+                    startActivityForResult(CropActivity.getJumpIntent(HomeActivity.this, false, photoFile), 100);
+                    break;
+                case 3:
+                    //相册中获取图片智能裁剪
+                    startActivityForResult(CropActivity.getJumpIntent(HomeActivity.this, true, photoFile), 100);
+                    break;
+                case 4:
+                    break;
+                case 5:
 
-                            break;
-
-                    }
-//                    ToastUtils.showToast(holder.mItemView.getContext(), "点击事件：" + position);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return iconA.length;
-        }
-
-
-        class ListHolder extends RecyclerView.ViewHolder {
-            ImageView icon;
-            View mItemView;
-
-            ListHolder(View itemView) {
-                super(itemView);
-                mItemView = itemView;
-                icon = (ImageView) itemView.findViewById(R.id.iv_icon);
+                    break;
             }
         }
+    };
 
-
-    }
 
     /**
      * 从相机中获取图片
@@ -170,7 +131,6 @@ public class HomeActivity extends AppCompatActivity {
 //        RxGalleryFinalApi.setImgSaveRxSDCard("WaterMarker");
         //裁剪会自动生成路径；也可以手动设置裁剪的路径；
         RxGalleryFinalApi.setImgSaveRxCropSDCard(Constants.IMAGE_BASE + Constants.IMAGE_CROP);
-
 
 
         SimpleRxGalleryFinal.get().init(
@@ -222,12 +182,12 @@ public class HomeActivity extends AppCompatActivity {
         RxGalleryFinalApi instance = RxGalleryFinalApi.getInstance(HomeActivity.this);
         instance
                 .openGalleryRadioImgDefault(
-                new RxBusResultDisposable<ImageRadioResultEvent>() {
-                    @Override
-                    protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
-                        Logger.i("只要选择图片就会触发");
-                    }
-                })
+                        new RxBusResultDisposable<ImageRadioResultEvent>() {
+                            @Override
+                            protected void onEvent(ImageRadioResultEvent imageRadioResultEvent) throws Exception {
+                                Logger.i("只要选择图片就会触发");
+                            }
+                        })
                 .onCropImageResult(
                         new IRadioImageCheckedListener() {
                             @Override

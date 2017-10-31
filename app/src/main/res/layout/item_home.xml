@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical">
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="0dp"
-        android:gravity="center"
         android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_heightPercent="30%sw"
         app:layout_widthPercent="50%w">
 
         <ImageView
             android:id="@+id/iv_icon"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_production"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/main_text_black" />
 
     </com.zhy.android.percent.support.PercentLinearLayout>
 

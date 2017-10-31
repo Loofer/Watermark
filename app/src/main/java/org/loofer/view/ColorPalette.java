@@ -274,11 +274,12 @@ class ColorPalette {
         Color.parseColor("#1DE9B6"),
         Color.parseColor("#00E676"),
 //        Color.parseColor("#76FF03"),
-        Color.parseColor("#C6FF00"),
+//        Color.parseColor("#C6FF00"),
         Color.parseColor("#FFEA00"),
         Color.parseColor("#FFC400"),
         Color.parseColor("#FF9100"),
-        Color.parseColor("#FF3D00")
+        Color.parseColor("#FF3D00"),
+        Color.parseColor("#000000")
       };
 
   static final int[][] ACCENT_COLORS_SUB =
