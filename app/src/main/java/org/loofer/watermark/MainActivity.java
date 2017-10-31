@@ -9,17 +9,17 @@ import android.os.Looper;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.xw.repo.BubbleSeekBar;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.loofer.utils.SPUtils;
@@ -50,13 +50,13 @@ import static org.loofer.view.ColorGridAdapter.COLOR_CHOOSE_INDEX;
 public class MainActivity extends AppCompatActivity {
 
     private ImageView mImageView;
-    private SeekBar mSeekBarDrection;
-    private SeekBar mSeekBarAlpha;
+    private BubbleSeekBar mSeekBarDrection;
+    private BubbleSeekBar mSeekBarAlpha;
     private ImageUtil mImageUtil;
     private String picPath;
     private Bitmap srcBitmap;
-    private TextView mTvSize;
-    private EditText mEtWaterMarker;
+    //    private TextView mTvSize;
+    private AppCompatEditText mEtWaterMarker;
     private FillGridView mGridView;
     private ColorGridAdapter mColorGridAdapter;
     private Toolbar mToolBar;
@@ -80,15 +80,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         initIndicator();
+        initToolbar();
 
         mPllDirection = (PercentLinearLayout) findViewById(R.id.pll_direction);
         mPllStyle = (LinearLayout) findViewById(R.id.pll_style);
         mPllOthor = (PercentLinearLayout) findViewById(R.id.pll_othor);
 
         mImageView = (ImageView) findViewById(R.id.iv_bg);
-        mToolBar = (Toolbar) findViewById(R.id.common_toolbar);
-        mToolBar.inflateMenu(R.menu.menu_main);
-        mToolBar.setOnMenuItemClickListener(mOnMenuItemClickListener);
+
         mTvTitle = (TextView) findViewById(R.id.toolbar_title_tv);
         mTvTitle.setText("水印处理");
         mGridView = (FillGridView) findViewById(R.id.grid_color);
@@ -97,28 +96,43 @@ public class MainActivity extends AppCompatActivity {
         mGridView.setAdapter(mColorGridAdapter);
         mGridView.setSelector(ResourcesCompat.getDrawable(getResources(), R.drawable.md_transparent, null));
 
-        mEtWaterMarker = (EditText) findViewById(R.id.et_watermarker);
+        mEtWaterMarker = (AppCompatEditText) findViewById(R.id.et_watermarker);
         mEtWaterMarker.addTextChangedListener(mTextWatcher);
         if (srcBitmap.getWidth() > srcBitmap.getHeight()) {
             mImageView.setMaxWidth(ScreenUtils.getScreenWidth(this));
             mImageView.setMaxHeight((int) (ScreenUtils.getScreenWidth(this) * 5.0 / 8.0 + 0.5));
         }
-        mTvSize = (TextView) findViewById(R.id.tv_size);
+//        mTvSize = (TextView) findViewById(R.id.tv_size);
 
-        mTvSize.setText("w：" + srcBitmap.getWidth() + "h：" + srcBitmap.getHeight());
-        mSeekBarDrection = (SeekBar) findViewById(R.id.seekBar_direction);
-        mSeekBarAlpha = (SeekBar) findViewById(R.id.seekBar_alpha);
-        mSeekBarDrection.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
-        mSeekBarAlpha.setOnSeekBarChangeListener(mOnSeekBarAlphaChangeListener);
+//        mTvSize.setText("w：" + srcBitmap.getWidth() + "h：" + srcBitmap.getHeight());
+        mSeekBarDrection = (BubbleSeekBar) findViewById(R.id.seekBar_direction);
+        mSeekBarAlpha = (BubbleSeekBar) findViewById(R.id.seekBar_alpha);
+        mSeekBarDrection.setOnProgressChangedListener(mOnProgressChangedListener);
+        mSeekBarAlpha.setOnProgressChangedListener(mOnProgressAlphaChangedListener);
         mImageUtil = new ImageUtil();
-        setWaterMask(mEtWaterMarker.getText().toString(), 45, 255, Color.parseColor("#FF1744"));
+        int color = (int) SPUtils.get(MainActivity.this, COLOR_CHOOSE, Color.parseColor("#FF1744"));
+        setWaterMask(mEtWaterMarker.getText().toString(), 45, 255, color);
+    }
+
+    private void initToolbar() {
+        mToolBar = (Toolbar) findViewById(R.id.common_toolbar);
+        mToolBar.setTitle("");
+        mToolBar.setNavigationIcon((R.drawable.abc_ic_ab_back_material));
+        mToolBar.inflateMenu(R.menu.menu_main);
+        mToolBar.setOnMenuItemClickListener(mOnMenuItemClickListener);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initIndicator() {
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.addTab(mTabLayout.newTab().setText("方向大小"));
         mTabLayout.addTab(mTabLayout.newTab().setText("样式"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("其他设置"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("水印文字"));
         mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
     }
 
@@ -185,44 +199,43 @@ public class MainActivity extends AppCompatActivity {
     };
 
     //文字方向
-    SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+    BubbleSeekBar.OnProgressChangedListener mOnProgressChangedListener = new BubbleSeekBar.OnProgressChangedListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            ToastUtils.showToast(MainActivity.this, progress + "");
+        public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
             int color = (int) SPUtils.get(MainActivity.this, COLOR_CHOOSE, Color.parseColor("#FF1744"));
             setWaterMask(mEtWaterMarker.getText().toString(), progress, mSeekBarAlpha.getProgress(), color);
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
+        public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
 
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
+        public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
 
         }
     };
+
     //透明度
-    SeekBar.OnSeekBarChangeListener mOnSeekBarAlphaChangeListener = new SeekBar.OnSeekBarChangeListener() {
+    BubbleSeekBar.OnProgressChangedListener mOnProgressAlphaChangedListener = new BubbleSeekBar.OnProgressChangedListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            ToastUtils.showToast(MainActivity.this, progress + "");
+        public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
             int color = (int) SPUtils.get(MainActivity.this, COLOR_CHOOSE, Color.parseColor("#FF1744"));
             setWaterMask(mEtWaterMarker.getText().toString(), mSeekBarDrection.getProgress(), progress, color);
-//            setHWaterMask(progress);
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
+        public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
 
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
+        public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
 
         }
     };
+
 
     //颜色选择的 adapter
     ColorGridAdapter.OnColorItemClickListener mOnColorItemClickListener = new ColorGridAdapter.OnColorItemClickListener() {

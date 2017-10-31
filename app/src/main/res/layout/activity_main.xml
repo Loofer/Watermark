@@ -1,17 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center_horizontal"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <include layout="@layout/common_toolbar"/>
+    <include layout="@layout/common_toolbar" />
 
     <ImageView
         android:id="@+id/iv_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter" />
 
 
     <com.zhy.android.percent.support.PercentLinearLayout
@@ -25,8 +25,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorAccent"
             app:tabMaxWidth="0dp"
-            app:tabMode="fixed"/>
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/gray" />
 
 
         <com.zhy.android.percent.support.PercentFrameLayout
@@ -49,16 +51,32 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:text="方向调整"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/main_text_gray"
+                    android:textSize="16sp" />
 
-                <SeekBar
+                <!--<SeekBar
                     android:id="@+id/seekBar_direction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="15dp"
                     android:max="180"
-                    android:progress="45"/>
+                    android:progress="45" />-->
+
+                <com.xw.repo.BubbleSeekBar
+                    android:id="@+id/seekBar_direction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    app:bsb_max="180"
+                    app:bsb_min="0"
+                    app:bsb_progress="45"
+                    app:bsb_second_track_color="@color/colorAccent"
+                    app:bsb_show_section_text="true"
+                    app:bsb_show_thumb_text="true"
+                    app:bsb_track_size="4dp" />
 
 
                 <TextView
@@ -69,22 +87,40 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:text="透明度"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/main_text_gray"
+                    android:textSize="16sp" />
 
-                <SeekBar
+
+                <com.xw.repo.BubbleSeekBar
+                    android:id="@+id/seekBar_alpha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="15dp"
+                    app:bsb_max="255"
+                    app:bsb_min="0"
+                    app:bsb_progress="255"
+                    app:bsb_second_track_color="@color/colorAccent"
+                    app:bsb_show_section_text="true"
+                    app:bsb_show_thumb_text="true"
+                    app:bsb_track_size="4dp" />
+
+                <!--<SeekBar
                     android:id="@+id/seekBar_alpha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="15dp"
                     android:max="255"
-                    android:progress="255"/>
+                    android:progress="255" />-->
 
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/tv_size"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal" />-->
 
 
             </com.zhy.android.percent.support.PercentLinearLayout>
@@ -106,9 +142,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:text="颜色"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/main_text_gray"
+                    android:textSize="16sp" />
 
-                <include layout="@layout/layout_colorchooser_grid"/>
+                <include layout="@layout/layout_colorchooser_grid" />
 
             </LinearLayout>
 
@@ -129,14 +166,18 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:text="水印文字"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/main_text_gray"
+                    android:textSize="16sp" />
 
-                <EditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/et_watermarker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="默认水印"/>
+                    android:text="默认水印"
+                    android:textColor="@color/main_text_black"
+                    android:textColorHint="@color/main_text_gray"
+                    app:backgroundTint="@color/colorAccent" />
 
             </com.zhy.android.percent.support.PercentLinearLayout>
 
