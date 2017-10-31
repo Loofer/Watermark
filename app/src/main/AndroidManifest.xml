@@ -17,12 +17,21 @@
         <activity
             android:name="org.loofer.HomeActivity"
             android:label="@string/app_name">
+        </activity>
+
+        <activity
+            android:name="org.loofer.splash.SplashActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="org.loofer.lead.GuideActivity" />
+
+
         <activity android:name="org.loofer.photo.SelectPicActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name="org.loofer.photo.CropActivity" />
