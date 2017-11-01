@@ -2,9 +2,11 @@ package org.loofer.lead;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +15,7 @@ import java.util.List;
  */
 
 public class GuideViewPagerAdapter extends PagerAdapter {
-    private List<View> views;
+    private List<View> views = new ArrayList<>();
 
     public GuideViewPagerAdapter(List<View> views) {
         super();

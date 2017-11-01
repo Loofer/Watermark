@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation arg0) {
 
-                if (isFirst) {
+                if (!isFirst) {
                     //是第一次进来
                     Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
                     startActivity(intent);
