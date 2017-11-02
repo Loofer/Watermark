@@ -1,4 +1,4 @@
-include ':app', ':rxgallery'
+include ':app', ':rxgallery', ':mvp'
 
 
 project(':rxgallery').projectDir = new File('library/rxgallery')

@@ -31,5 +31,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.xw.repo:bubbleseekbar:3.8-lite'
     compile project(':rxgallery')
+    compile project(':mvp')
     compile 'com.github.apl-devs:appintro:v4.2.2'
 }
