@@ -1,37 +1,36 @@
-package org.loofer.splash;
+package org.loofer.ui.splash;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-import org.loofer.HomeActivity;
-import org.loofer.lead.GuideActivity;
+import org.loofer.ui.home.HomeActivity;
+import org.loofer.ui.base.view.BaseActivity;
+import org.loofer.ui.lead.GuideActivity;
 import org.loofer.utils.SPUtils;
 import org.loofer.watermark.R;
+
+import butterknife.BindView;
 
 /**
  * Created by rcjs on 2017/10/31.
  * Description:闪屏页
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
-    private ImageView imgStart;
+    @BindView(R.id.iv_splash_bg)
+    ImageView mIvSplashBg;
     private boolean isFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        initView();
         initData();
     }
 
-    private void initView() {
-        imgStart = (ImageView) findViewById(R.id.iv_splash_bg);
-    }
 
     private void initData() {
         isFirst = (boolean) SPUtils.get(this, "isFirst", true);
@@ -72,7 +71,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        imgStart.setAnimation(animation);
+        mIvSplashBg.setAnimation(animation);
     }
 
 

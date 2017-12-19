@@ -4,5 +4,8 @@
     <string name="app_name">水印砖家</string>
     <string name="hello_world">Hello world!</string>
     <string name="sd_invailed">内部存储不可用</string>
+    <string name="pic_get_error">图片获取失败</string>
+    <string name="pic_crop_error">图片裁剪失败</string>
+    <string name="pic_take_or_album">请先拍照或选择图片</string>
 
 </resources>

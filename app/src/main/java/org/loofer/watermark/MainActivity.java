@@ -43,7 +43,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-import static org.loofer.photo.SelectPicActivity.CROP_PIC_PATH;
+import static org.loofer.ui.photo.SelectPicActivity.CROP_PIC_PATH;
 import static org.loofer.view.ColorGridAdapter.COLOR_CHOOSE;
 import static org.loofer.view.ColorGridAdapter.COLOR_CHOOSE_INDEX;
 

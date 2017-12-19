@@ -1,4 +1,4 @@
-package org.loofer;
+package org.loofer.ui.home;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import org.loofer.photo.CropActivity;
+import org.loofer.ui.photo.CropActivity;
 import org.loofer.utils.Constants;
 import org.loofer.utils.FileUtils;
 import org.loofer.utils.SimpleRxGalleryFinal;
@@ -92,7 +92,6 @@ public class HomeActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     ImageFromCameraDefault();
-//                            startActivity(new Intent(HomeActivity.this, SelectPicActivity.class));
                     break;
                 case 1:
                     //手工裁剪方式

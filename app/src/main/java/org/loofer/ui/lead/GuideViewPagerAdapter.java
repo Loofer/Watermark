@@ -1,8 +1,7 @@
-package org.loofer.lead;
+package org.loofer.ui.lead;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 

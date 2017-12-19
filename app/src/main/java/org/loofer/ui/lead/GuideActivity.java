@@ -1,53 +1,55 @@
-package org.loofer.lead;
+package org.loofer.ui.lead;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 
-import org.loofer.HomeActivity;
+import org.loofer.ui.home.HomeActivity;
+import org.loofer.ui.base.view.BaseActivity;
 import org.loofer.utils.SPUtils;
 import org.loofer.watermark.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by rcjs on 2017/10/31.
  * Description:
  */
 
-public class GuideActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
-    private ViewPager mViewPager;
+    @BindView(R.id.vp_guide)
+    ViewPager mViewPager;
+    @BindView(R.id.btn_login)
+    Button startBtn;
+    @BindView(R.id.rg_dot)
+    RadioGroup mRadioGroup;
     private GuideViewPagerAdapter mPagerAdapter;
     private List<View> views = new ArrayList<View>();
-    private Button startBtn;
-    private RadioGroup mRadioGroup;
     // 引导页图片资源
-    private static final int[] pics = {R.layout.guid_view1, R.layout.guid_view2, R.layout.guid_view3, R.layout.guid_view4};
+    private final int[] pics = {R.layout.guid_view1, R.layout.guid_view2, R.layout.guid_view3, R.layout.guid_view4};
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
+        ButterKnife.bind(this);
         initView();
         initListener();
-        initData();
     }
 
 
     private void initView() {
-        startBtn = (Button) findViewById(R.id.btn_login);
-        mRadioGroup = (RadioGroup) findViewById(R.id.rg_dot);
         mRadioGroup.check(mRadioGroup.getChildAt(0).getId());
-        mViewPager = (ViewPager) findViewById(R.id.vp_guide);
         // 初始化引导页视图列表
         for (int pic : pics) {
             View view = LayoutInflater.from(this).inflate(pic, null);
@@ -59,15 +61,11 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void initData() {
-
-    }
 
     private void initListener() {
         startBtn.setOnClickListener(this);
         mViewPager.addOnPageChangeListener(this);
     }
-
 
     @Override
     protected void onPause() {
@@ -106,7 +104,7 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
         mRadioGroup.check(mRadioGroup.getChildAt(position).getId());
         if (position == mPagerAdapter.getCount() - 1) {
             startBtn.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             startBtn.setVisibility(View.GONE);
         }
     }

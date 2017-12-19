@@ -15,12 +15,12 @@
         android:label="@string/app_name"
         android:theme="@style/Theme_Light.Default">
         <activity
-            android:name="org.loofer.HomeActivity"
+            android:name="org.loofer.ui.home.HomeActivity"
             android:label="@string/app_name">
         </activity>
 
         <activity
-            android:name="org.loofer.splash.SplashActivity"
+            android:name="org.loofer.ui.splash.SplashActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,12 +29,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.loofer.lead.GuideActivity" />
+        <activity android:name="org.loofer.ui.lead.GuideActivity" />
 
 
-        <activity android:name="org.loofer.photo.SelectPicActivity" />
+        <activity android:name="org.loofer.ui.photo.SelectPicActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name="org.loofer.photo.CropActivity" />
+        <activity android:name="org.loofer.ui.photo.CropActivity" />
 
         <activity
             android:name="cn.finalteam.rxgalleryfinal.ui.activity.MediaActivity"
@@ -45,7 +45,7 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:theme="@style/Theme_Light.Default"
             android:screenOrientation="portrait" />
-        <!--<activity android:name="org.loofer.HomeActivity"/>-->
+        <!--<activity android:name="org.loofer.ui.home.HomeActivity"/>-->
     </application>
 
 </manifest>
