@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import org.loofer.ui.base.view.BaseActivity;
 import org.loofer.ui.photo.CropActivity;
 import org.loofer.utils.Constants;
 import org.loofer.utils.FileUtils;
@@ -26,22 +25,25 @@ import org.loofer.watermark.R;
 
 import java.io.File;
 
+import butterknife.BindView;
 import cn.finalteam.rxgalleryfinal.RxGalleryFinalApi;
 import cn.finalteam.rxgalleryfinal.rxbus.RxBusResultDisposable;
 import cn.finalteam.rxgalleryfinal.rxbus.event.ImageRadioResultEvent;
 import cn.finalteam.rxgalleryfinal.ui.base.IRadioImageCheckedListener;
 import cn.finalteam.rxgalleryfinal.utils.Logger;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
 
-    File photoFile;
+    @BindView(R.id.toolbar_title_tv)
+    TextView mToolbarTitleTv;
+    @BindView(R.id.grid_home)
+    FillGridView mGridHome;
+    private File photoFile;
 
 
     public static final String CROP_PIC_PATH = "crop_image";
-    private FillGridView mGridHome;
-    private Toolbar mToolBar;
-    private TextView mTvTitle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mToolBar = (Toolbar) findViewById(R.id.common_toolbar);
-        mTvTitle = (TextView) findViewById(R.id.toolbar_title_tv);
-        mTvTitle.setText("水印砖家");
-        mGridHome = (FillGridView) findViewById(R.id.grid_home);
+        mToolbarTitleTv.setText(R.string.app_name);
         mGridHome.setAdapter(new HomeGridAdapter());
         mGridHome.setOnItemClickListener(mOnItemClickListener);
     }
@@ -64,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
         if (Utils.isExternalStorageAvailable()) {
             photoFile = Utils.getFilePathByExtennel("/WaterMarker/crop", FileUtils.getFileNameByTime());
         } else {
-            ToastUtils.showToast(HomeActivity.this, "内部存储不可用！");
+            ToastUtils.showToast(HomeActivity.this, R.string.sd_invailed);
         }
     }
 
@@ -142,29 +141,23 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onCropCancel() {
-                        ToastUtils.showToast(HomeActivity.this, "取消裁剪");
+                        showError("取消裁剪");
                     }
 
                     @Override
                     public void onCropSuccess(@Nullable Uri uri) {
-//                        uri.getPath();
-//                        ToastUtils.shoToast(HomeActivity.this, uri.getPath());
                         File file = new File(uri.getPath());
                         if (file.exists()) {
                             Logger.i("裁剪成功");
-                            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
-                            intent.putExtra(CROP_PIC_PATH, file.getPath());
-                            startActivity(intent);
+                            gotoMain(file.getPath());
                         } else {
-                            ToastUtils.showToast(HomeActivity.this, "失败");
+                            showError("失败");
                         }
-//                        Toast.makeText(getSimpleActivity(), "裁剪成功：" + uri, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCropError(@NonNull String errorMessage) {
-                        ToastUtils.showToast(HomeActivity.this, errorMessage);
-//                        Toast.makeText(getSimpleActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                        showError(errorMessage);
                     }
                 }
         ).openCamera();
@@ -197,7 +190,7 @@ public class HomeActivity extends AppCompatActivity {
                                     intent.putExtra(CROP_PIC_PATH, file.getPath());
                                     startActivity(intent);
                                 } else {
-                                    ToastUtils.showToast(HomeActivity.this, "失败");
+                                    showError("失败");
                                 }
                                 Logger.i("裁剪完成");
                             }
@@ -210,5 +203,15 @@ public class HomeActivity extends AppCompatActivity {
                         });
     }
 
+
+    public void showError(String msg) {
+        ToastUtils.showToast(HomeActivity.this, msg);
+    }
+
+    public void gotoMain(String path) {
+        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        intent.putExtra(CROP_PIC_PATH, path);
+        startActivity(intent);
+    }
 
 }
