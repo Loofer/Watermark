@@ -9,15 +9,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.loofer.mvp.MvpBasePresenter;
-import org.loofer.mvp.common.MvpPresenter;
-import org.loofer.ui.base.presenter.MvpLceRxPresenter;
-import org.loofer.ui.photo.CropMvpView;
-import org.loofer.utils.DefaultDialogUtils;
-import org.loofer.utils.SPUtils;
 import org.loofer.utils.Utils;
 import org.loofer.watermark.ImageUtil;
 import org.loofer.watermark.R;
-import org.reactivestreams.Subscription;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -112,12 +106,6 @@ public class MarkPresenter extends MvpBasePresenter<MarkMvpView> {
     public void actionSave(final ImageView imageView) {
         Flowable.just(1)
                 .throttleFirst(1, TimeUnit.SECONDS)
-                .doOnSubscribe(new Consumer<Subscription>() {
-                    @Override
-                    public void accept(@NonNull Subscription subscription) throws Exception {
-                        Log.d("----", "订阅开始");
-                    }
-                })
                 .map(new Function<Integer, Integer>() {
                     @Override
                     public Integer apply(@NonNull Integer integer) throws Exception {
@@ -142,7 +130,6 @@ public class MarkPresenter extends MvpBasePresenter<MarkMvpView> {
                     @Override
                     public void run() throws Exception {
                         getView().showLoading(false);
-                        Log.d("---", "最后调用-----");
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -152,12 +139,10 @@ public class MarkPresenter extends MvpBasePresenter<MarkMvpView> {
                     public void accept(@NonNull Boolean isSaved) throws Exception {
                         if (isSaved) {
                             getView().showError(R.string.pic_save_success);
-                            Logger.d("文件保存成功");
                             getView().saveDefaultText();
                             getView().closePage();
                         } else {
                             getView().showError(R.string.pic_save_error);
-                            Log.d("---", "保存失败");
                         }
                     }
                 }, new Consumer<Throwable>() {
