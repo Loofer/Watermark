@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 
 import org.loofer.ui.home.HomeActivity;
 import org.loofer.ui.base.view.BaseActivity;
+import org.loofer.ui.splash.SplashActivity;
 import org.loofer.utils.SPUtils;
 import org.loofer.watermark.R;
 
@@ -71,7 +72,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
     protected void onPause() {
         super.onPause();
         // 如果切换到后台，就设置下次不进入功能引导页
-        SPUtils.put(this, "isFirst", false);
+        SPUtils.put(this, SplashActivity.KEY_FIRST_IN, false);
         finish();
     }
 
@@ -80,7 +81,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
-        SPUtils.put(this, "isFirst", false);
+        SPUtils.put(this, SplashActivity.KEY_FIRST_IN, false);
         finish();
     }
 

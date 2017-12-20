@@ -1,12 +1,13 @@
 package org.loofer.watermark;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.TypedValue;
+
+import org.loofer.MarkApplication;
 
 /**
  * 图片工具类
@@ -15,21 +16,9 @@ import android.util.TypedValue;
  */
 public class ImageUtil {
 
-    public Bitmap getMarkTextBitmap(Context gContext, String gText, int width, int height, float textSize, float inter, int color, int alpha, int degress) {
-//      Bitmap bitmap = ACache.get(gContext).getAsBitmap(gText);
-//      if (is4Showing && bitmap != null){
-//          return bitmap;
-//      }
-
-//        float textSize;
-//        float inter;
-//        if (is4Showing) {
-        textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSize, gContext.getResources().getDisplayMetrics());
-        inter = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, inter, gContext.getResources().getDisplayMetrics());
-//        } else {
-//            textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 54, gContext.getResources().getDisplayMetrics());
-//            inter = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 75, gContext.getResources().getDisplayMetrics());
-//        }
+    public Bitmap getMarkTextBitmap(String gText, int width, int height, float textSize, float inter, int color, int alpha, int degress) {
+        textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSize, MarkApplication.getInstance().getResources().getDisplayMetrics());
+        inter = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, inter, MarkApplication.getInstance().getResources().getDisplayMetrics());
 
         int sideLength;
         if (width > height) {

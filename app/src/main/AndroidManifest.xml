@@ -11,6 +11,7 @@
 
     <application
         android:allowBackup="true"
+        android:name="org.loofer.MarkApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme_Light.Default">
@@ -33,7 +34,7 @@
 
 
         <activity android:name="org.loofer.ui.photo.SelectPicActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="org.loofer.ui.mark.MarkActivity" />
         <activity android:name="org.loofer.ui.photo.CropActivity" />
 
         <activity

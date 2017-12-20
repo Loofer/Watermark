@@ -20,7 +20,7 @@ import org.loofer.utils.ToastUtils;
 import org.loofer.utils.Utils;
 import org.loofer.view.FillGridView;
 import org.loofer.view.HomeGridAdapter;
-import org.loofer.watermark.MainActivity;
+import org.loofer.ui.mark.MarkActivity;
 import org.loofer.watermark.R;
 
 import java.io.File;
@@ -78,7 +78,7 @@ public class HomeActivity extends BaseActivity {
             return;
         }
         if (requestCode == 100 && photoFile.exists()) {
-            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            Intent intent = new Intent(HomeActivity.this, MarkActivity.class);
             intent.putExtra(CROP_PIC_PATH, photoFile.getPath());
             startActivity(intent);
         }
@@ -186,7 +186,7 @@ public class HomeActivity extends BaseActivity {
                             public void cropAfter(Object t) {
                                 File file = new File(t.toString());
                                 if (file.exists()) {
-                                    Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                                    Intent intent = new Intent(HomeActivity.this, MarkActivity.class);
                                     intent.putExtra(CROP_PIC_PATH, file.getPath());
                                     startActivity(intent);
                                 } else {
@@ -209,7 +209,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     public void gotoMain(String path) {
-        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+        Intent intent = new Intent(HomeActivity.this, MarkActivity.class);
         intent.putExtra(CROP_PIC_PATH, path);
         startActivity(intent);
     }

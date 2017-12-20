@@ -24,6 +24,9 @@ public class SplashActivity extends BaseActivity {
     ImageView mIvSplashBg;
     private boolean isFirst;
 
+
+    public static final String KEY_FIRST_IN = "isFirst";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,7 @@ public class SplashActivity extends BaseActivity {
 
 
     private void initData() {
-        isFirst = (boolean) SPUtils.get(this, "isFirst", true);
+        isFirst = (boolean) SPUtils.get(this, KEY_FIRST_IN, true);
         listenAnimation();
     }
 
@@ -56,7 +59,7 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animation arg0) {
 
-                if (!isFirst) {
+                if (isFirst) {
                     //是第一次进来
                     Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
                     startActivity(intent);

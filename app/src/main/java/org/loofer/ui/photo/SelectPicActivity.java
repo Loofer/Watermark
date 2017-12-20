@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import org.loofer.ui.base.view.BaseLceActivity;
 import org.loofer.utils.ToastUtils;
-import org.loofer.watermark.MainActivity;
+import org.loofer.ui.mark.MarkActivity;
 import org.loofer.watermark.R;
 
 import butterknife.BindView;
@@ -52,7 +52,7 @@ public class SelectPicActivity extends BaseLceActivity<View, Bitmap, SelectPicMv
                 break;
             case R.id.btn_watermarker:
                 if (getPresenter().getIsGetPic()) {
-                    Intent intent = new Intent(SelectPicActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SelectPicActivity.this, MarkActivity.class);
                     intent.putExtra(CROP_PIC_PATH, getPresenter().getPicFile().getPath());
                     startActivity(intent);
                 } else {

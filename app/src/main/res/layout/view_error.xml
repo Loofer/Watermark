@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/errorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="@dimen/padding_large"
+        android:drawableTop="@drawable/ic_cloud_off"
+        android:gravity="center"
+        android:padding="@dimen/padding_large"
+        android:text="An error has occurred! click here to retry"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/font_large"
+        />
+
+</merge>

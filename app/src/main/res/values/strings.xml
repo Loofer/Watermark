@@ -7,5 +7,7 @@
     <string name="pic_get_error">图片获取失败</string>
     <string name="pic_crop_error">图片裁剪失败</string>
     <string name="pic_take_or_album">请先拍照或选择图片</string>
+    <string name="pic_save_success">保存成功，请到相册中查看</string>
+    <string name="pic_save_error">保存文件失败，请重新尝试</string>
 
 </resources>
