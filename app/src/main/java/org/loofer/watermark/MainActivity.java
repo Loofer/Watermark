@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity {
 
             try {
                 out = new FileOutputStream(file);
-                if (bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out)) {
+                if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)) {
                     out.flush();
                     out.close();
                 }
