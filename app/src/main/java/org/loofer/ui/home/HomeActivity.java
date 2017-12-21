@@ -10,8 +10,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.loofer.ui.base.view.BaseActivity;
+import org.loofer.ui.mark.MarkActivity;
 import org.loofer.ui.photo.CropActivity;
 import org.loofer.utils.Constants;
 import org.loofer.utils.FileUtils;
@@ -20,7 +22,6 @@ import org.loofer.utils.ToastUtils;
 import org.loofer.utils.Utils;
 import org.loofer.view.FillGridView;
 import org.loofer.view.HomeGridAdapter;
-import org.loofer.ui.mark.MarkActivity;
 import org.loofer.watermark.R;
 
 import java.io.File;
@@ -212,6 +213,24 @@ public class HomeActivity extends BaseActivity {
         Intent intent = new Intent(HomeActivity.this, MarkActivity.class);
         intent.putExtra(CROP_PIC_PATH, path);
         startActivity(intent);
+    }
+
+    private static final int EXIT_TIME = 2000;// 两次按返回键的间隔判断
+    private long firstExitTime = 0L;// 用来保存第一次按返回键的时间
+
+    /**
+     * 双击返回键退出
+     */
+    @Override
+    public void onBackPressed() {
+        long curTime = System.currentTimeMillis();//获取当前的系统时间--毫秒
+        if (curTime - firstExitTime < EXIT_TIME) {
+            //两次返回键的时间小于2s就退出应用
+            finish();
+        } else {
+            Toast.makeText(this, "再按一次返回键退出", Toast.LENGTH_SHORT).show();
+            firstExitTime = curTime;
+        }
     }
 
 }
