@@ -72,13 +72,14 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //默认
-        SimpleRxGalleryFinal.get().onActivityResult(requestCode, resultCode, data);
+
         //智能裁剪
         if (resultCode != RESULT_OK) {
             return;
         }
         if (requestCode == 100 && photoFile.exists()) {
+            //默认
+            SimpleRxGalleryFinal.get().onActivityResult(requestCode, resultCode, data);
             Intent intent = new Intent(HomeActivity.this, MarkActivity.class);
             intent.putExtra(CROP_PIC_PATH, photoFile.getPath());
             startActivity(intent);
@@ -91,15 +92,16 @@ public class HomeActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position) {
                 case 0:
+                    //拍照裁剪
                     ImageFromCameraDefault();
                     break;
                 case 1:
-                    //手工裁剪方式
+                    //相册选择裁剪
                     ImageFromGalleryDefault();
                     break;
                 case 2:
                     //拍照获取图片智能裁剪
-                    startActivityForResult(CropActivity.getJumpIntent(HomeActivity.this, false, photoFile), 100);
+                   startActivityForResult(CropActivity.getJumpIntent(HomeActivity.this, false, photoFile), 100);
                     break;
                 case 3:
                     //相册中获取图片智能裁剪
